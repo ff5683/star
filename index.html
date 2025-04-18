@@ -1,94 +1,122 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>계절별 별자리</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>서울 계절별 별자리</title>
+  <script src="https://slowe.github.io/VirtualSky/script/virtualsky.min.js"></script>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
       text-align: center;
-      padding: 30px;
-    }
-
-    .section {
-      display: none;
-    }
-
-    .active {
-      display: block;
+      font-size: 1.2rem;
+      background-color: black;
+      color: white;
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
     }
 
     button {
+      font-size: 1rem;
       margin: 10px;
       padding: 10px 20px;
-      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background-color: #444;
+      color: white;
       cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #666;
+    }
+
+    #starmap {
+      width: 100%;
+      height: 60vh;
+      margin-top: 20px;
+    }
+
+    #constellations {
+      margin-top: 20px;
+      font-size: 1.1rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
     }
   </style>
 </head>
 <body>
+  <h1>서울 계절별 별자리</h1>
+  <p>계절을 선택하면 별자리 지도와 목록이 보여요!</p>
 
-  <!-- 홈 화면 -->
-  <div id="home" class="section active">
-    <h1>계절별 별자리</h1>
-    <button onclick="showSeason('spring')">🌸 봄</button>
-    <button onclick="showSeason('summer')">🌞 여름</button>
-    <button onclick="showSeason('autumn')">🍁 가을</button>
-    <button onclick="showSeason('winter')">❄️ 겨울</button>
-  </div>
+  <button onclick="showSeason('spring')">봄</button>
+  <button onclick="showSeason('summer')">여름</button>
+  <button onclick="showSeason('autumn')">가을</button>
+  <button onclick="showSeason('winter')">겨울</button>
 
-  <!-- 계절별 화면 -->
-  <div id="spring" class="section">
-    <h2>봄에 보이는 별자리</h2>
-    <ul>
-      <li>사자자리 (Leo)</li>
-      <li>처녀자리 (Virgo)</li>
-      <li>목동자리 (Boötes)</li>
-    </ul>
-    <button onclick="goHome()">홈으로</button>
-  </div>
-
-  <div id="summer" class="section">
-    <h2>여름에 보이는 별자리</h2>
-    <ul>
-      <li>거문고자리 (Lyra)</li>
-      <li>독수리자리 (Aquila)</li>
-      <li>백조자리 (Cygnus)</li>
-    </ul>
-    <button onclick="goHome()">홈으로</button>
-  </div>
-
-  <div id="autumn" class="section">
-    <h2>가을에 보이는 별자리</h2>
-    <ul>
-      <li>페가수스자리 (Pegasus)</li>
-      <li>물고기자리 (Pisces)</li>
-      <li>안드로메다자리 (Andromeda)</li>
-    </ul>
-    <button onclick="goHome()">홈으로</button>
-  </div>
-
-  <div id="winter" class="section">
-    <h2>겨울에 보이는 별자리</h2>
-    <ul>
-      <li>오리온자리 (Orion)</li>
-      <li>큰개자리 (Canis Major)</li>
-      <li>쌍둥이자리 (Gemini)</li>
-    </ul>
-    <button onclick="goHome()">홈으로</button>
-  </div>
+  <div id="starmap"></div>
+  <div id="constellations"></div>
 
   <script>
+    const constellationList = {
+      spring: ['사자자리 (Leo)', '처녀자리 (Virgo)', '목동자리 (Boötes)'],
+      summer: ['거문고자리 (Lyra)', '백조자리 (Cygnus)', '독수리자리 (Aquila)'],
+      autumn: ['페가수스자리 (Pegasus)', '물고기자리 (Pisces)', '양자리 (Aries)'],
+      winter: ['오리온자리 (Orion)', '큰개자리 (Canis Major)', '쌍둥이자리 (Gemini)']
+    };
+
+    const seasonToDate = {
+      spring: '2025-03-21T21:00:00',
+      summer: '2025-06-21T21:00:00',
+      autumn: '2025-09-23T21:00:00',
+      winter: '2025-12-21T21:00:00'
+    };
+
+    let sky;
+
     function showSeason(season) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById(season).classList.add('active');
+      const date = new Date(seasonToDate[season]);
+
+      // 별자리 지도 초기화 및 다시 로드
+      document.getElementById("starmap").innerHTML = "";
+
+      sky = new VirtualSky({
+        id: "starmap",
+        latitude: 37.5665,
+        longitude: 126.9780,
+        projection: "stereo",
+        showconstellations: true,
+        showstarlabels: true,
+        showplanets: true,
+        gradient: true,
+        cardinalpoints: true,
+        constellations: true,
+        live: false,
+        date: date.toISOString()
+      });
+
+      // 별자리 목록 출력
+      const list = constellationList[season]
+        .map(name => `<li>${name}</li>`)
+        .join('');
+
+      document.getElementById("constellations").innerHTML = `
+        <h2>${getSeasonName(season)}에 볼 수 있는 별자리</h2>
+        <ul>${list}</ul>
+      `;
     }
 
-    function goHome() {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById('home').classList.add('active');
+    function getSeasonName(season) {
+      return {
+        spring: '봄',
+        summer: '여름',
+        autumn: '가을',
+        winter: '겨울'
+      }[season];
     }
   </script>
-
 </body>
 </html>
