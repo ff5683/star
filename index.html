@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>계절별 별자리</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .active {
+      display: block;
+    }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 홈 화면 -->
+  <div id="home" class="section active">
+    <h1>계절별 별자리</h1>
+    <button onclick="showSeason('spring')">🌸 봄</button>
+    <button onclick="showSeason('summer')">🌞 여름</button>
+    <button onclick="showSeason('autumn')">🍁 가을</button>
+    <button onclick="showSeason('winter')">❄️ 겨울</button>
+  </div>
+
+  <!-- 계절별 화면 -->
+  <div id="spring" class="section">
+    <h2>봄에 보이는 별자리</h2>
+    <ul>
+      <li>사자자리 (Leo)</li>
+      <li>처녀자리 (Virgo)</li>
+      <li>목동자리 (Boötes)</li>
+    </ul>
+    <button onclick="goHome()">홈으로</button>
+  </div>
+
+  <div id="summer" class="section">
+    <h2>여름에 보이는 별자리</h2>
+    <ul>
+      <li>거문고자리 (Lyra)</li>
+      <li>독수리자리 (Aquila)</li>
+      <li>백조자리 (Cygnus)</li>
+    </ul>
+    <button onclick="goHome()">홈으로</button>
+  </div>
+
+  <div id="autumn" class="section">
+    <h2>가을에 보이는 별자리</h2>
+    <ul>
+      <li>페가수스자리 (Pegasus)</li>
+      <li>물고기자리 (Pisces)</li>
+      <li>안드로메다자리 (Andromeda)</li>
+    </ul>
+    <button onclick="goHome()">홈으로</button>
+  </div>
+
+  <div id="winter" class="section">
+    <h2>겨울에 보이는 별자리</h2>
+    <ul>
+      <li>오리온자리 (Orion)</li>
+      <li>큰개자리 (Canis Major)</li>
+      <li>쌍둥이자리 (Gemini)</li>
+    </ul>
+    <button onclick="goHome()">홈으로</button>
+  </div>
+
+  <script>
+    function showSeason(season) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(season).classList.add('active');
+    }
+
+    function goHome() {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('home').classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
